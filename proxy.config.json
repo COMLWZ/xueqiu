@@ -1,0 +1,11 @@
+{
+    "/webapi/*": {
+        "target": "http://www.snowball.com",
+        "pathRewrite": {
+            "^/webapi": ""
+        },
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}

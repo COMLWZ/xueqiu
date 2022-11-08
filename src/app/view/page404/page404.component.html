@@ -1,0 +1,27 @@
+<div class="notfound">
+  <nz-result [nzIcon]="notFound" [nzTitle]="title" nzSubTitle="抱歉，您访问的页面不存在！">
+    <div nz-result-extra>
+      <button nz-button nzType="primary" (click)="goHome()">返回首页</button>
+    </div>
+  </nz-result>
+</div>
+
+<ng-template #tplContent>
+  <b style="color:red">将在 <strong style="font-size: 20px;">{{skiptime}}</strong> 秒后跳转至首页...</b>
+</ng-template>
+
+<ng-template #notFound>
+  <img src="assets/images/404page@2x-81d31854c7.gif" alt="" class="notfound">
+</ng-template>
+
+<ng-template #title>
+  <div class="title">
+    <img src="assets/images/watermelon.png" alt="" class="watermelon">
+    哎呀！错误啦！
+  </div>
+</ng-template>
+
+
+
+  
+

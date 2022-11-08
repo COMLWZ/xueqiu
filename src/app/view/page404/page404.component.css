@@ -1,0 +1,20 @@
+.notfound {
+  width: 960px;
+  margin: 0 auto;
+}
+.notfound img.notfound {
+  max-width: 700px;
+}
+.notfound .title {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.notfound .title .watermelon {
+  height: 30px;
+  margin-right: 16px;
+}
+.notfound ::ng-deep .ant-modal .ant-modal-content {
+  min-width: 400px;
+}

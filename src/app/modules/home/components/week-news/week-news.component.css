@@ -1,0 +1,77 @@
+.weekNews {
+  font-size: 16px;
+  color: #33353c;
+  min-height: 500px;
+}
+.weekNews a {
+  color: #33353c;
+  text-decoration: none;
+}
+.weekNews .time {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #edf0f5;
+  margin: 20px 0 30px;
+}
+.weekNews .time span {
+  font-size: 30px;
+  color: #f70;
+  margin-right: 3px;
+  vertical-align: -3px;
+}
+.weekNews .news {
+  font-size: 15px;
+  line-height: 1.6;
+}
+.weekNews .news td {
+  padding: 0 0 40px;
+  vertical-align: top;
+  position: relative;
+}
+.weekNews .news a {
+  display: block;
+}
+.weekNews .news a:hover {
+  background-color: #f7f2f2;
+}
+.weekNews .news .point {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 10px;
+  background-color: #edf0f5;
+}
+.weekNews .news .line {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  bottom: 0;
+  width: 4px;
+  margin-left: -2px;
+  background-color: #edf0f5;
+}
+.weekNews .news .mark * {
+  color: #f70;
+}
+.weekNews .news .mark .point {
+  background-color: #f70;
+}
+.weekNews nz-spin {
+  text-align: center;
+}
+.weekNews .error {
+  text-align: center;
+  padding: 10px 0;
+}
+.weekNews .load_more_news {
+  cursor: pointer;
+  display: block;
+  width: 200px;
+  margin: 0 auto 20px;
+  padding: 5px 0;
+  border-radius: 2px;
+  background-color: #e6f1fb;
+  font-size: 12px;
+  color: #06c;
+  text-align: center;
+}

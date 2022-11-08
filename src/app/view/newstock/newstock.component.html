@@ -1,0 +1,108 @@
+<div class="stock_warpper">
+    <!-- 左侧导航栏 -->
+    <div class="industry_nav textSelect " [innerHTML]="industry | safeHtml"></div>
+    <div class="stock_container">
+        <div class="stock_header">
+            <nz-breadcrumb nzSeparator=">">
+                <nz-breadcrumb-item>
+                    <a [routerLink]="[ '/hq' ]">行情中心</a>
+                </nz-breadcrumb-item>
+                <ng-container *ngFor="let item of breadcrumb;let index=index;">
+                    <nz-breadcrumb-item [innerHTML]="item"></nz-breadcrumb-item>
+                    <span class="separator" *ngIf="index!=breadcrumb.length-1">></span>
+                </ng-container>
+            </nz-breadcrumb>
+            <div class="stock_pagesize" [hidden]="!showMore">
+                每页显示：
+                <a [ngClass]="{'selected': pageSize==30}" (click)="pageSizeChange(30, 'flag', $event)">30</a>
+                <a [ngClass]="{'selected': pageSize==60}" (click)="pageSizeChange(60, 'flag', $event)">60</a>
+                <a [ngClass]="{'selected': pageSize==90}" (click)="pageSizeChange(90, 'flag', $event)">90</a>
+            </div>
+        </div>
+
+        <!-- 新股列表容器 -->
+        <div class="newstock_main" [hidden]="showMore">
+            <ng-container
+                *ngTemplateOutlet="stockList;context:{'stockList': stockSubscribe, 'title':'新股申购', 'obj': subscribe_obj, 'lst': subscribe_lst, 'order': newstock_moduleSort[0], 'params': '#exchange=CN&plate=xgsg&firstName=hsgs&secondName=xgss'}">
+            </ng-container>
+
+            <ng-container
+                *ngTemplateOutlet="stockList;context:{'stockList': stockMarket, 'title':'新股行情', 'obj': market_obj, 'lst': market_lst, 'order': newstock_moduleSort[1], 'params': '#exchange=CN&plate=xghq&firstName=hsgs&secondName=xgss'}">
+            </ng-container>
+
+            <ng-container
+                *ngTemplateOutlet="stockList;context:{'stockList': stockAnalysis,'title':'新股数据解析', 'order': newstock_moduleSort[2], 'chart': true}">
+            </ng-container>
+
+            <ng-container
+                *ngTemplateOutlet="stockList;context:{'stockList': stockEarnings, 'title':'打新收益', 'obj': earnings_obj, 'lst': earnings_lst, 'order': newstock_moduleSort[3], 'params': '#exchange=CN&plate=dxsy&firstName=hsgs&secondName=xgss'}">
+            </ng-container>
+        </div>
+        <!-- 更多股票 -->
+        <app-stock-table [hidden]="!showMore||showType=='all'" [listData]="stockMore" [obj]="subscribe_obj"
+            [lst]="subscribe_lst" [total]="total" [pageSize]="pageSize" [pageIndex]="pageIndex"
+            (outer)="getChildMsg($event)">
+        </app-stock-table>
+        <!-- 所有股票详情 -->
+        <app-stock-table [hidden]="!showMore||showType=='more'" [type]="'all'" [listData]="stockMore" [obj]="stock_obj"
+            [lst]="stock_lst" [total]="total" [pageSize]="pageSize" [pageIndex]="pageIndex"
+            (outer)="getChildMsg($event)">
+        </app-stock-table>
+    </div>
+</div>
+
+<!-- stockList股票列表 obj参数对象 lst参数key值列表 order是flex布局order排序顺序 -->
+<ng-template #stockList let-stockList="stockList" let-title="title" let-obj='obj' let-lst='lst' let-order='order'
+    let-params="params" let-chart="chart">
+    <div class="stock_list_con" [ngStyle]="{'order': order}">
+        <header class="header_title">
+            <div class="title">{{title}}</div>
+            <div class="more_move">
+                <a [href]="params" (click)="getMoreStock($event, title)" *ngIf="!chart">更多</a>
+                <span title="上移模块" class="up" [ngClass]="{'up_no': order==1}" (click)="arrowMove($event, 'up')"></span>
+                <span title="下移模块" class="down" [ngClass]="{'down_no': order==4}"
+                    (click)="arrowMove($event, 'down')"></span>
+            </div>
+        </header>
+        <div class="stockList" *ngIf="!chart&&stockList!=-1">
+            <nz-table [nzData]="stockList" [nzLoading]="!stockList" [nzLoadingIndicator]="loading"
+                [nzScroll]="{ x: '' }" [nzShowPagination]=false>
+                <thead *ngIf="stockList&&stockList.length>0">
+                    <tr>
+                        <th *ngFor="let item of lst;let index=index;" [nzLeft]="index==0 ? true : false">{{ obj[item] }}
+                        </th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stock of stockList">
+                        <td nzLeft><a href="" [title]="stock.name">{{ stock[lst[0]] }}</a></td>
+                        <ng-container *ngFor="let key of lst;let index=index;">
+                            <td *ngIf="index!=0">{{ stock[key] | myriabit:1 }}</td>
+                        </ng-container>
+                        <td><a href="/account/login">关注</a></td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        <div class="stockChart" *ngIf="chart&&stockList!=-1">
+            <div class="showType" *ngIf="stockList&&stockList.length>0">
+                <a class="selected" (click)="chartToggle(0, $event)">网上中签率</a>
+                <a (click)="chartToggle(1, $event)">首日涨幅/换手率</a>
+                <a (click)="chartToggle(2, $event)">发行价/首日开盘价/首日收盘价</a>
+                <a (click)="chartToggle(3, $event)">实际募资总额</a>
+                <a (click)="chartToggle(4, $event)">每签获利</a>
+            </div>
+            <div class="stock_chart"></div>
+            <ng-container *ngIf="!stockList">
+                <ng-container *ngTemplateOutlet="loading"></ng-container>
+            </ng-container>
+        </div>
+        <nz-result nzIcon="warning" nzTitle="数据请求失败了>_<" nzStatus="error" nzSubTitle="请刷新页面重试" *ngIf="stockList==-1">
+        </nz-result>
+    </div>
+</ng-template>
+
+<ng-template #loading>
+    <img src="assets/images/ajax-loader.gif" alt="加载中..." class="loading">
+</ng-template>

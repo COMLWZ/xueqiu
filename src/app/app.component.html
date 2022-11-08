@@ -1,0 +1,204 @@
+<div class="nav_placeholder">
+  <!--导航条占位 -->
+</div>
+<div class="header" *ngIf="showNav" @routeAnimations>
+  <div class="nav">
+    <div class="logo">
+      <a href="" title="雪球">
+        <img src="assets/images/logo.2015.png" alt="雪球" />
+        <img src="assets/images/logotype.2015.png" alt="雪球" />
+      </a>
+    </div>
+    <div class="navList">
+      <!-- [routerLinkActiveOptions]="{exact:true}" 路由路径完全匹配 -->
+      <div class="navItem" [routerLink]="['/home']" routerLinkActive="active">
+        首页
+      </div>
+      <div class="navItem" [routerLink]="['/screener']" routerLinkActive="active">
+        股票筛选
+      </div>
+      <div class="navItem" [routerLink]="['/hq']" (click)="newStockSkip()" routerLinkActive="active">
+        新股上市
+      </div>
+    </div>
+    <div class="search_container">
+      <div class="search">
+        <input type="text" contenteditable="true" placeholder="搜索 股票/用户/组合" [(ngModel)]="query"
+          (keyup)="searchSuggest($event)" (blur)="searchBlur()" (focus)="this.losefocus = false;" #search />
+        <span class="searchIcon">
+          <svg class="icon" aria-hidden="true" style="color: #4471bc">
+            <use xlink:href="#icon-sousuo"></use>
+          </svg>
+        </span>
+      </div>
+      <div class="suggest" [hidden]="losefocus" (mousedown)="$event.preventDefault()">
+        <a [style.display]="searchHistory.length>0&&query==''?'block':'none'" style="cursor: default;">
+          搜索历史
+          <i nz-popconfirm nzPopconfirmTitle="确定清空历史记录吗？" nzPopconfirmPlacement="bottomRight"
+            (nzOnConfirm)="historyClear()" nz-icon nzType="clear" nzTheme="outline" class="clear"></i>
+        </a>
+        <div class="history" [hidden]="searchHistory.length<1||query!=''">
+          <a href="" *ngFor="let history of searchHistory;let i=index;" [title]="history">
+            {{history}}
+            <i nz-icon nzType="close-circle" nzTheme="outline" title="删除" (click)="historyDelete($event, i)"></i>
+          </a>
+        </div>
+        <a href="" [style.display]="stockList.length<1?'none':'block'">股票
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-you"></use>
+          </svg>
+        </a>
+        <ul *ngFor="let stock of stockList">
+          <li><a href="" (click)="searchIt(stock.query + '(' + stock.code + ')')">{{ stock.query + '(' + stock.code +
+              ')'}}</a></li>
+        </ul>
+        <a href="" [style.display]="userList.length<1?'none':'block'">用户
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-you"></use>
+          </svg>
+        </a>
+        <ul *ngFor="let user of userList">
+          <li><a href="" (click)="searchIt(user.screen_name)">
+              <img [src]="user.photo_domain + (user.profile_image_url | splitUrl)" alt="">
+              <span>{{ user.screen_name }}</span>
+            </a></li>
+        </ul>
+        <a href="" [style.display]="groupList.length<1?'none':'block'">组合
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-you"></use>
+          </svg>
+        </a>
+        <ul *ngFor="let group of groupList">
+          <li><a href="" (click)="searchIt(group.name)">{{ group.name }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="login">
+      <a class="btn_download" (click)="qrDown=!qrDown">
+        下载App
+        <div class="qrcode_down" [hidden]="!qrDown">
+          <svg class="triangle" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <path class="Header_arrow_16v" d="M5 0 L 0 4 L 10 4"></path>
+          </svg>
+          <span>扫一扫，下载</span>
+          <div class="qrcode"></div>
+        </div>
+      </a>
+      <a class="btn_login" (click)="openLogin()">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-denglu1"></use>
+        </svg>
+        <span>登录/注册</span>
+      </a>
+    </div>
+  </div>
+</div>
+<!-- 登录组件 -->
+<app-login [open]="loginOpen" (closeChange)="closeChange($event)"></app-login>
+<!-- @routeAnimation基于路由配置data属性值为动画触发器分配动画状态值 -->
+<div [@routeAnimations]="animationRoute(outlet)">
+  <router-outlet #outlet="outlet"></router-outlet>
+
+  <!-- 底部 -->
+  <div class="footer_bg">
+    <footer class="footer_container">
+      <div class="footer_hd">
+        <div class="footer_about">
+          <div class="about">
+            <img src="assets/images/08dfffc483270da1e7bc8a387b4645ab.png" alt="" />
+            <ul>
+              <li class="point">
+                <a href="">常见问题</a>
+              </li>
+              <li class="point">
+                <a href="">加入我们</a>
+              </li>
+              <li>
+                <a href="">关于雪球</a>
+              </li>
+            </ul>
+          </div>
+          <p>
+            风险提示：雪球里任何用户或者嘉宾的发言，都有其特定立场，投资决策需要建立在独立思考之上
+          </p>
+        </div>
+        <ul class="about_business">
+          <li>
+            <a href="">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-hushenAgu"></use>
+              </svg>
+              <span>A股开户</span>
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gangmeikaihugongsi"></use>
+              </svg>
+              <span>港股开户</span>
+            </a>
+          </li>
+          <li style="margin-right: 0">
+            <a href="">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gangmeikaihugongsi"></use>
+              </svg>
+              <span>美股开户</span>
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-jijinshengou"></use>
+              </svg>
+              <span>蛋卷基金</span>
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-simujijin"></use>
+              </svg>
+              <span>私募中心</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer_end">
+        <div class="left">
+          <p>互联网违法和不良信息投诉：01061840634 / tousu@xueqiu.com <a href="">违法(含侵权)及不良信息投诉指引</a> <a href="">雪球服务协议</a> <a
+              href="">雪球隐私政策</a></p>
+          <p><span>&copy;2021 XUEQIU.COM</span><span>北京雪球信息科技有限公司</span> <a href="">京公网安备11010502040379号</a> <a
+              href="">京ICP证100666号</a> <a href="">京ICP备10040543</a> <a href="">营业执照</a></p>
+          <p><a href="">证券业协会会员单位（代码817027）</a> <a href="">广播电视节目制作经营许可证: (京)字第08638号</a> <a href="">互联网药品信息服务资格证书</a>
+            <a href=""></a> <a href="">出版物经营许可证</a>
+          </p>
+        </div>
+        <div class="right">
+          <a href="">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-weixin"></use>
+            </svg>
+          </a>
+          <a href="">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-weibo"></use>
+            </svg>
+          </a>
+          <a href="">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-kefu"></use>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<div class="spin_con">
+  <!-- 加载中 -->
+  <nz-spin [nzSpinning]="isSpinning" nzTip="拼命加载中..." [nzSize]="'large'">
+  </nz-spin>
+</div>

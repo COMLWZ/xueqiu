@@ -1,0 +1,320 @@
+<div class="article_container" *ngIf="article.error!='error'">
+    <div class="article_author" [innerHTML]="article.author | safeHtml">
+        <!-- 作者信息 -->
+    </div>
+    <!-- 帖子详情 -->
+    <div class="article_bd">
+        <h1 class="article_title" *ngIf="article.title">{{article.title}}</h1>
+        <div class="article_details" #articeDetail [innerHTML]="article.article | safeHtml">
+        </div>
+    </div>
+    <div class="article_reward">
+        <span>打赏</span>
+    </div>
+    <div class="article_meta">
+        <div class="info">
+            {{Comments?.count}}评论
+            <span class="complain">投诉</span>
+        </div>
+        <div class="share">
+            <span><i nz-icon nzType="share-alt" nzTheme="outline"></i>转发</span>
+            <span><i nz-icon nzType="like" nzTheme="outline"></i>赞</span>
+            <span><i nz-icon nzType="star" nzTheme="outline"></i>收藏</span>
+            <span class="share_we">
+                <i nz-icon nzType="wechat" nzTheme="outline" style="color: #093c;"></i>
+                <i nz-icon nzType="weibo" nzTheme="outline" style="color: #D20C;"></i>
+            </span>
+        </div>
+    </div>
+    <ng-container *ngTemplateOutlet="editor;context: {show:'true'}"></ng-container>
+
+    <div class="comment_container">
+        <div class="comment_hot" *ngIf="hotComments?.comments?.length>0">
+            <div class="comment_head">
+                <h3>精彩评论 ({{hotComments?.comments?.length}})</h3>
+            </div>
+            <ng-container *ngTemplateOutlet="comments;context:{comment: hotComments?.comments, type:'hot'}">
+            </ng-container>
+        </div>
+        <div id="commentAnchor" class="comment_all" *ngIf="Comments?.count>0">
+            <div class="comment_head">
+                <h3>全部评论 ({{Comments?.count}})</h3>
+                <div class="comment_sort">
+                    <span>最近</span>
+                    <span>最早</span>
+                    <span>赞</span>
+                </div>
+            </div>
+            <ng-container *ngTemplateOutlet="comments;context:{comment: Comments?.comments, type:'all'}"></ng-container>
+
+            <!-- 分页 -->
+            <nz-pagination [(nzPageIndex)]="currentPage" [nzTotal]="Comments?.count" [nzPageSize]="20"
+                [nzSize]="'small'" [nzHideOnSinglePage]="true" (nzPageIndexChange)="pageChange()"
+                [nzItemRender]="renderItemTemplate" *ngIf="Comments?.maxPage>1"></nz-pagination>
+            <ng-template #renderItemTemplate let-type let-page="page">
+                <ng-container [ngSwitch]="type">
+                    <a *ngSwitchCase="'page'" (click)="toTop()">{{page}}</a>
+                    <a *ngSwitchCase="'prev'" (click)="toTop()" [hidden]="currentPage==1">上一页</a>
+                    <a *ngSwitchCase="'next'" (click)="toTop()" [hidden]="currentPage==Comments?.maxPage">下一页</a>
+                    <a *ngSwitchCase="'prev_5'" (click)="toTop()"><i nz-icon nzType="double-left"
+                            nzTheme="outline"></i></a>
+                    <a *ngSwitchCase="'next_5'" (click)="toTop()"><i nz-icon nzType="double-right"
+                            nzTheme="outline"></i></a>
+                </ng-container>
+            </ng-template>
+        </div>
+    </div>
+</div>
+<!-- 回到顶部 -->
+<div class="back_container">
+    <div class="back_top">
+        <nz-back-top [nzTemplate]="tpl" [nzVisibilityHeight]="200">
+            <ng-template #tpl>
+                <svg class="icon ant-back-top-inner" aria-hidden="true">
+                    <use xlink:href="#icon-huidaodingbu"></use>
+                </svg>
+            </ng-template>
+        </nz-back-top>
+    </div>
+</div>
+<!-- 占位 -->
+<div class="perch" *ngIf="article.error=='error'"></div>
+
+<!-- 评论模板 commentList评论列表  type评论类型精彩评论hot或全部评论all-->
+<ng-template #comments let-commentList="comment" let-type="type">
+    <div *ngFor="let item of commentList;let i=index;" class="comment_item">
+        <nz-comment [nzAuthor]="item.user.screen_name" [nzDatetime]="item.timeBefore">
+            <nz-avatar nz-comment-avatar nzIcon="user"
+                [nzSrc]="item.user.photo_domain + (item.user.profile_image_url | splitUrl)">
+            </nz-avatar>
+            <nz-comment-content *ngIf="item.reply_comment">
+                <!-- @ 被回复者 -->
+                <div class="comment_reply">
+                    <a>@{{item.reply_comment.user.screen_name}}&nbsp;:&nbsp;</a>
+                    <p [innerHTML]="item.reply_comment?.text"></p>
+                </div>
+            </nz-comment-content>
+            <nz-comment-content>
+                <!-- 评论详情 -->
+                <p [innerHTML]="item.text"></p>
+            </nz-comment-content>
+            <nz-comment-action>
+                <label>
+                    <i nz-icon nzType="like" [nzTheme]="item.liked? twotone : outline"></i>
+                    <span class="count">赞 <b [hidden]="item.like_count<1">({{ item.like_count }})</b></span>
+                </label>
+            </nz-comment-action>
+            <nz-comment-action>
+                <label>
+                    <i nz-icon nzType="transaction" nzTheme="outline"></i>
+                    <span class="count">打赏</span>
+                </label>
+            </nz-comment-action>
+            <nz-comment-action>
+                <label (click)="replay($event)">
+                    <i nz-icon nzType="message" nzTheme="outline"></i>
+                    <span>回复</span>
+                </label>
+            </nz-comment-action>
+            <nz-comment-action>
+                <label>
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span class="count">举报</span>
+                </label>
+            </nz-comment-action>
+            <nz-comment-action>
+                <label>
+                    <i class="fa fa-user-times"></i>
+                    <span>拉黑</span>
+                </label>
+            </nz-comment-action>
+            <nz-comment-action *ngIf="item.reply_comment">
+                <label (click)="getTalks(item.in_reply_to_comment_id, type, i)">
+                    <i nz-icon nzType="eye" nzTheme="outline"></i>
+                    <span class="count">查看对话</span>
+                </label>
+            </nz-comment-action>
+            <div class="more_reply" *ngIf="item.reply_comment==null&&item.reply_count>0"
+                (click)="getReplies(item.id, type, i)">
+                <span class="count">查看{{item.reply_count}}条回复</span>
+                <i nz-icon nzType="right" nzTheme="outline"></i>
+            </div>
+        </nz-comment>
+
+        <ng-container *ngTemplateOutlet="editor"></ng-container>
+    </div>
+</ng-template>
+
+
+<!-- 评论编辑器  可传入参数show-点击取消后是否显示编辑器-->
+<ng-template #editor let-show="show">
+    <div class="editor_bg">
+        <nz-avatar nzIcon="user" nzSrc="//xavatar.imedao.com/community/default/avatar.png!240x240.jpg"></nz-avatar>
+        <div class="editor_textarea">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="lite-editor__triangle">
+                <path d="M5 0 L 0 5 L 5 10" class="arrow"></path>
+            </svg>
+            <div class="textarea">
+                <!-- <div class="placeholder">发表评论...</div> -->
+                <div contenteditable="true" role="textbox" aria-multiline="true" placeholder="发表评论..." class="textbox">
+                    <!-- 评论容器 -->
+                </div>
+            </div>
+            <div class="editor_toolbar">
+                <div class="toolbar_edit">
+                    <div class="tool_emoji">
+                        <i nz-icon nzType="smile" nzTheme="outline" (mousedown)="openEmoPanel($event)"></i>
+                        <div class="emoji_bg">
+                            <div class="emoji_container">
+                                <!-- 表情 -->
+                                <div class="emoji" *ngFor="let emoji of emojis">
+                                    <img [src]="emoji" alt="" (click)="emojiInput($event)">
+                                </div>
+                                <div class="error" *ngIf="emoLoad=='error'">
+                                    >_<呀！表情加载失败了<p><a (click)="getEmojis($event)">点击重试一下吧</a></p>
+                                </div>
+                                <!-- 加载中 -->
+                                <nz-spin [nzSpinning]="emoLoad==true" [nzIndicator]="emojiLoad" nzTip="获取表情中...">
+                                </nz-spin>
+                                <ng-template #emojiLoad><i nz-icon nzType="loading"></i></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <i nz-icon nzType="dollar" nzTheme="outline"></i>
+                    <i nz-icon nzType="pay-circle" nzTheme="outline"></i>
+                    <i nz-icon nzType="picture" nzTheme="outline"></i>
+                    <label>
+                        <input type="checkbox" name="transmit">
+                        同时转发
+                    </label>
+                </div>
+                <div class="toolbar_post">
+                    <a nz-button nzType="text" (click)="inputCancel($event, show)">取消</a>
+                    <button nz-button nzType="primary">发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- 更多回复/对话面板 -->
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="replyObj?.title" (nzOnCancel)="handleCancel()" [nzCentered]="true"
+    [nzWidth]="700" [nzCancelText]="null" [nzOkText]="null">
+    <ng-container *nzModalContent>
+        <!-- 回复 -->
+        <ng-container *ngIf="commentType=='reply'">
+            <!-- 当前回复 -->
+            <div *ngFor="let item of lookComment;" class="comment_item">
+                <nz-comment [nzAuthor]="item.user.screen_name" [nzDatetime]="item.timeBefore">
+                    <nz-avatar nz-comment-avatar nzIcon="user"
+                        [nzSrc]="item.user.photo_domain + (item.user.profile_image_url | splitUrl)">
+                    </nz-avatar>
+                    <nz-comment-content>
+                        <!-- 评论详情 -->
+                        <p [innerHTML]="item.text"></p>
+                    </nz-comment-content>
+                    <nz-comment-action>
+                        <label>
+                            <i nz-icon nzType="like" [nzTheme]="item.liked? twotone : outline"></i>
+                            <span class="count">赞 <b [hidden]="item.like_count<1">({{ item.like_count
+                                    }})</b></span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label>
+                            <i nz-icon nzType="transaction" nzTheme="outline"></i>
+                            <span class="count">打赏</span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label (click)="replay($event)">
+                            <i nz-icon nzType="message" nzTheme="outline"></i>
+                            <span>回复</span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label>
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <span class="count">举报</span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label>
+                            <i class="fa fa-user-times"></i>
+                            <span>拉黑</span>
+                        </label>
+                    </nz-comment-action>
+                </nz-comment>
+
+                <ng-container *ngTemplateOutlet="editor"></ng-container>
+            </div>
+
+            <!-- 评论回复 -->
+            <div class="replies">
+                <ng-container *ngTemplateOutlet="comments;context:{comment: replyObj.replies, type:'all'}">
+                </ng-container>
+            </div>
+        </ng-container>
+
+        <!-- 对话 -->
+        <ng-container *ngIf="commentType=='talks'">
+            <!-- 更多对话 -->
+            <ng-container *ngTemplateOutlet="comments;context:{comment: replyObj.comments, type:'all'}">
+            </ng-container>
+
+            <!-- 当前对话 -->
+            <div *ngFor="let item of lookComment;" class="comment_item">
+                <nz-comment [nzAuthor]="item.user.screen_name" [nzDatetime]="item.timeBefore">
+                    <nz-avatar nz-comment-avatar nzIcon="user"
+                        [nzSrc]="item.user.photo_domain + (item.user.profile_image_url | splitUrl)">
+                    </nz-avatar>
+                    <nz-comment-content>
+                        <!-- 评论详情 -->
+                        <p [innerHTML]="item.text"></p>
+                    </nz-comment-content>
+                    <nz-comment-action>
+                        <label>
+                            <i nz-icon nzType="like" [nzTheme]="item.liked? twotone : outline"></i>
+                            <span class="count">赞 <b [hidden]="item.like_count<1">({{ item.like_count
+                                    }})</b></span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label>
+                            <i nz-icon nzType="transaction" nzTheme="outline"></i>
+                            <span class="count">打赏</span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label (click)="replay($event)">
+                            <i nz-icon nzType="message" nzTheme="outline"></i>
+                            <span>回复</span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label>
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <span class="count">举报</span>
+                        </label>
+                    </nz-comment-action>
+                    <nz-comment-action>
+                        <label>
+                            <i class="fa fa-user-times"></i>
+                            <span>拉黑</span>
+                        </label>
+                    </nz-comment-action>
+                </nz-comment>
+
+                <ng-container *ngTemplateOutlet="editor"></ng-container>
+            </div>
+        </ng-container>
+
+        <nz-spin [nzSpinning]="isSpinning==true" nzTip="内容载入中..." [nzDelay]="500"></nz-spin>
+    </ng-container>
+</nz-modal>
+
+<!-- 页面加载中 -->
+<div class="spin" *ngIf="pageLoading">
+    <nz-spin [nzSpinning]="pageLoading" [nzIndicator]="indicatorTemplate"></nz-spin>
+    <ng-template #indicatorTemplate><i nz-icon nzType="loading" style="font-size: 40px;"></i></ng-template>
+</div>

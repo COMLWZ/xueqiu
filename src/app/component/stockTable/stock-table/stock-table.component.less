@@ -1,0 +1,102 @@
+.stock_container {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  .tip {
+    text-align: center;
+    margin: 20px;
+  }
+  .stock_list_over {
+    min-width: 100%;
+    overflow-x: scroll;
+  }
+  .scroll_warpper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 15px;
+    border-bottom: 1px solid #f1f1f1;
+    .top_scroll_bar {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      height: 11px;
+      background-color: #ccc;
+      border-radius: 5px;
+    }
+  }
+
+  .stock_table {
+    font-size: 13px;
+    width: 100%;
+    ::ng-deep table {
+      width: 100%;
+      border: 4px solid #f4f4f4;
+      tr th {
+        padding-left: 5px;
+        text-align: left;
+        line-height: 30px;
+        color: #0055a2;
+        background-color: #fff;
+        white-space: nowrap;
+        text-align: right;
+        &:first-child {
+          text-align: left;
+        }
+      }
+      tr td {
+        padding: 6px 0 6px 5px;
+        line-height: 20px;
+        border: 1px solid #e4f2ff;
+        border-left: none;
+        border-right: none;
+        text-align: right;
+        &:first-child {
+          text-align: left;
+        }
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tr td:first-child {
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      tr td:nth-child(2) {
+        max-width: 90px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      tr:nth-child(2n + 1) {
+        background-color: #f7fbff;
+      }
+      a {
+        color: #0055a2;
+        text-decoration: none;
+      }
+      tr.tips td {
+        font-weight: 700;
+      }
+    }
+  }
+  ::ng-deep .ant-spin img {
+    position: relative;
+    top: 45%;
+  }
+  .ant-pagination {
+    float: right;
+  }
+  ::ng-deep .ant-spin-nested-loading {
+    min-height: 400px;
+  }
+}
+.stock_up {
+  color: #c10;
+}
+.stock_down {
+  color: #383;
+}

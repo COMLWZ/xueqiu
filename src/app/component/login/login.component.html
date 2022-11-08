@@ -1,0 +1,324 @@
+<div [ngClass]="{'login_mask': open}" *ngIf="open!=false" @pageAnimations>
+  <div class="modal_login">
+    <div class="modal_banner">
+      <i nz-icon nzType="close" nzTheme="outline" [hidden]="!open" (click)="closeModal()"></i>
+    </div>
+    <div class="modal_login_main">
+      <div class="login_nav">
+        <a (click)="reg_login='reg';safeCheck()" [ngClass]="{'active': reg_login=='reg'}">验证码登录/注册</a>
+        <a (click)="reg_login='login';safeCheck()" [ngClass]="{'active': reg_login=='login'}">账号密码登录</a>
+        <a (click)="reg_login='qr';makeQRCode();safeCheck()" [ngClass]="{'active': reg_login=='qr'}">二维码登录</a>
+      </div>
+      <div class="register" [hidden]="reg_login!='reg'">
+        <form nz-form [formGroup]="registerForm" class="login-form" (ngSubmit)="submitRegister()">
+          <nz-form-item>
+            <nz-form-control nzErrorTip="请输入正确的手机号">
+              <nz-input-group nzCompact>
+                <div class="select" [hidden]="email_login">
+                  <select class="select-nation" (change)="resetWidth($event)">
+                    <option value="86">中国</option>
+                    <option value="1">美国</option>
+                    <option value="1">加拿大</option>
+                    <option value="852">中国香港</option>
+                    <option value="65">新加坡</option>
+                    <option value="61">澳大利亚</option>
+                    <option value="886">中国台湾</option>
+                    <option value="44">英国</option>
+                    <option value="81">日本</option>
+                    <option value="853">中国澳门</option>
+                    <option value="60">马来西亚</option>
+                    <option value="49">德国</option>
+                    <option value="33">法国</option>
+                    <option value="82">韩国</option>
+                    <option value="64">新西兰</option>
+                    <option value="39">意大利</option>
+                    <option value="66">泰国</option>
+                    <option value="971">阿拉伯联合酋长国</option>
+                    <option value="34">西班牙</option>
+                    <option value="7">俄罗斯</option>
+                    <option value="46">瑞典</option>
+                    <option value="31">荷兰</option>
+                    <option value="62">印度尼西亚</option>
+                    <option value="63">菲律宾</option>
+                    <option value="353">爱尔兰</option>
+                    <option value="84">越南</option>
+                    <option value="966">沙特阿拉伯</option>
+                    <option value="855">柬埔寨</option>
+                    <option value="234">尼日利亚</option>
+                    <option value="244">安哥拉</option>
+                    <option value="41">瑞士</option>
+                    <option value="254">肯尼亚</option>
+                    <option value="52">墨西哥</option>
+                    <option value="27">南非</option>
+                    <option value="58">委内瑞拉</option>
+                    <option value="255">坦桑尼亚</option>
+                    <option value="92">巴基斯坦</option>
+                    <option value="47">挪威</option>
+                    <option value="32">比利时</option>
+                    <option value="55">巴西</option>
+                    <option value="351">葡萄牙</option>
+                    <option value="380">乌克兰</option>
+                    <option value="968">阿曼</option>
+                    <option value="358">芬兰</option>
+                    <option value="20">埃及</option>
+                    <option value="375">白俄罗斯</option>
+                    <option value="91">印度</option>
+                    <option value="965">科威特</option>
+                    <option value="94">斯里兰卡</option>
+                    <option value="251">埃塞俄比亚</option>
+                    <option value="90">土耳其</option>
+                    <option value="260">赞比亚</option>
+                    <option value="243">刚果民主共和国</option>
+                    <option value="40">罗马尼亚</option>
+                    <option value="267">博茨瓦纳</option>
+                    <option value="45">丹麦</option>
+                    <option value="972">以色列</option>
+                    <option value="992">塔吉克斯坦</option>
+                    <option value="507">巴拿马</option>
+                    <option value="974">卡塔尔</option>
+                    <option value="36">匈牙利</option>
+                    <option value="880">孟加拉国</option>
+                    <option value="258">莫桑比克</option>
+                    <option value="213">阿尔及利亚</option>
+                    <option value="237">喀麦隆</option>
+                    <option value="223">圣马力诺</option>
+                    <option value="98">伊朗</option>
+                    <option value="381">塞尔维亚</option>
+                    <option value="249">苏丹</option>
+                    <option value="421">斯洛伐克</option>
+                    <option value="266">莱索托</option>
+                    <option value="233">加纳</option>
+                    <option value="359">保加利亚</option>
+                    <option value="57">哥伦比亚</option>
+                    <option value="994">阿塞拜疆</option>
+                    <option value="264">纳米比亚</option>
+                    <option value="43">奥地利</option>
+                    <option value="212">西撒哈拉</option>
+                    <option value="976">蒙古</option>
+                    <option value="242">刚果</option>
+                    <option value="48">波兰</option>
+                    <option value="227">尼日尔</option>
+                    <option value="352">卢森堡</option>
+                    <option value="996">吉尔吉斯斯坦</option>
+                    <option value="250">卢旺达</option>
+                    <option value="235">乍得</option>
+                    <option value="597">苏里南</option>
+                    <option value="977">尼泊尔</option>
+                    <option value="962">约旦</option>
+                    <option value="228">多哥</option>
+                    <option value="1868">特里尼达及多巴哥</option>
+                    <option value="54">阿根廷</option>
+                    <option value="261">马达加斯加</option>
+                    <option value="502">危地马拉</option>
+                    <option value="964">伊拉克</option>
+                    <option value="231">利比里亚</option>
+                    <option value="1876">牙买加</option>
+                    <option value="240">赤道几内亚</option>
+                    <option value="224">几内亚</option>
+                    <option value="262">马约特</option>
+                    <option value="30">希腊</option>
+                    <option value="256">乌干达</option>
+                    <option value="93">阿富汗</option>
+                    <option value="241">加蓬</option>
+                    <option value="389">马其顿</option>
+                    <option value="225">科特迪瓦</option>
+                    <option value="51">秘鲁</option>
+                    <option value="1671">关岛</option>
+                  </select>
+                </div>
+                <input type="text" nz-input formControlName="phone" [placeholder]="email_login ? '请输入邮箱账号' : '请输入手机号'" />
+                <div class="addon">
+                  <a class="send_code">发送验证码</a>
+                </div>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="请输入验证码">
+              <nz-input-group>
+                <input type="password" nz-input formControlName="verify" placeholder="请输入验证码" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <div nz-row class="login-form-margin">
+            <div nz-col [nzSpan]="12">
+              <label nz-checkbox formControlName="remember">
+                <span>下次自动登录</span>
+              </label>
+            </div>
+            <div nz-col [nzSpan]="12">
+              <a class="login-type" (click)="emailLogin($event)">邮箱验证码登录</a>
+            </div>
+          </div>
+          <button nz-button class="login-form-button login-form-margin" nzType="primary" [nzLoading]="!is_safe">{{
+            is_safe==true ? "登&nbsp;&nbsp;录" : !is_safe ? "安全控件加载中" : "安全校验失败" }}</button>
+        </form>
+      </div>
+      <div class="login" [hidden]="reg_login!='login'">
+        <form nz-form [formGroup]="loginForm" class="login-form" (ngSubmit)="submitLogin()">
+          <nz-form-item>
+            <nz-form-control nzErrorTip="请输入正确的手机号">
+              <nz-input-group nzCompact>
+                <div class="select" [hidden]="!area_select">
+                  <select class="select-nation" (change)="resetWidth($event)">
+                    <option value="86">中国</option>
+                    <option value="1">美国</option>
+                    <option value="1">加拿大</option>
+                    <option value="852">中国香港</option>
+                    <option value="65">新加坡</option>
+                    <option value="61">澳大利亚</option>
+                    <option value="886">中国台湾</option>
+                    <option value="44">英国</option>
+                    <option value="81">日本</option>
+                    <option value="853">中国澳门</option>
+                    <option value="60">马来西亚</option>
+                    <option value="49">德国</option>
+                    <option value="33">法国</option>
+                    <option value="82">韩国</option>
+                    <option value="64">新西兰</option>
+                    <option value="39">意大利</option>
+                    <option value="66">泰国</option>
+                    <option value="971">阿拉伯联合酋长国</option>
+                    <option value="34">西班牙</option>
+                    <option value="7">俄罗斯</option>
+                    <option value="46">瑞典</option>
+                    <option value="31">荷兰</option>
+                    <option value="62">印度尼西亚</option>
+                    <option value="63">菲律宾</option>
+                    <option value="353">爱尔兰</option>
+                    <option value="84">越南</option>
+                    <option value="966">沙特阿拉伯</option>
+                    <option value="855">柬埔寨</option>
+                    <option value="234">尼日利亚</option>
+                    <option value="244">安哥拉</option>
+                    <option value="41">瑞士</option>
+                    <option value="254">肯尼亚</option>
+                    <option value="52">墨西哥</option>
+                    <option value="27">南非</option>
+                    <option value="58">委内瑞拉</option>
+                    <option value="255">坦桑尼亚</option>
+                    <option value="92">巴基斯坦</option>
+                    <option value="47">挪威</option>
+                    <option value="32">比利时</option>
+                    <option value="55">巴西</option>
+                    <option value="351">葡萄牙</option>
+                    <option value="380">乌克兰</option>
+                    <option value="968">阿曼</option>
+                    <option value="358">芬兰</option>
+                    <option value="20">埃及</option>
+                    <option value="375">白俄罗斯</option>
+                    <option value="91">印度</option>
+                    <option value="965">科威特</option>
+                    <option value="94">斯里兰卡</option>
+                    <option value="251">埃塞俄比亚</option>
+                    <option value="90">土耳其</option>
+                    <option value="260">赞比亚</option>
+                    <option value="243">刚果民主共和国</option>
+                    <option value="40">罗马尼亚</option>
+                    <option value="267">博茨瓦纳</option>
+                    <option value="45">丹麦</option>
+                    <option value="972">以色列</option>
+                    <option value="992">塔吉克斯坦</option>
+                    <option value="507">巴拿马</option>
+                    <option value="974">卡塔尔</option>
+                    <option value="36">匈牙利</option>
+                    <option value="880">孟加拉国</option>
+                    <option value="258">莫桑比克</option>
+                    <option value="213">阿尔及利亚</option>
+                    <option value="237">喀麦隆</option>
+                    <option value="223">圣马力诺</option>
+                    <option value="98">伊朗</option>
+                    <option value="381">塞尔维亚</option>
+                    <option value="249">苏丹</option>
+                    <option value="421">斯洛伐克</option>
+                    <option value="266">莱索托</option>
+                    <option value="233">加纳</option>
+                    <option value="359">保加利亚</option>
+                    <option value="57">哥伦比亚</option>
+                    <option value="994">阿塞拜疆</option>
+                    <option value="264">纳米比亚</option>
+                    <option value="43">奥地利</option>
+                    <option value="212">西撒哈拉</option>
+                    <option value="976">蒙古</option>
+                    <option value="242">刚果</option>
+                    <option value="48">波兰</option>
+                    <option value="227">尼日尔</option>
+                    <option value="352">卢森堡</option>
+                    <option value="996">吉尔吉斯斯坦</option>
+                    <option value="250">卢旺达</option>
+                    <option value="235">乍得</option>
+                    <option value="597">苏里南</option>
+                    <option value="977">尼泊尔</option>
+                    <option value="962">约旦</option>
+                    <option value="228">多哥</option>
+                    <option value="1868">特里尼达及多巴哥</option>
+                    <option value="54">阿根廷</option>
+                    <option value="261">马达加斯加</option>
+                    <option value="502">危地马拉</option>
+                    <option value="964">伊拉克</option>
+                    <option value="231">利比里亚</option>
+                    <option value="1876">牙买加</option>
+                    <option value="240">赤道几内亚</option>
+                    <option value="224">几内亚</option>
+                    <option value="262">马约特</option>
+                    <option value="30">希腊</option>
+                    <option value="256">乌干达</option>
+                    <option value="93">阿富汗</option>
+                    <option value="241">加蓬</option>
+                    <option value="389">马其顿</option>
+                    <option value="225">科特迪瓦</option>
+                    <option value="51">秘鲁</option>
+                    <option value="1671">关岛</option>
+                  </select>
+                </div>
+                <input type="text" nz-input formControlName="phone_email"
+                  [placeholder]="area_select ? '请收入手机号' : '请收入手机号或邮箱'" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="请输入密码">
+              <nz-input-group>
+                <input type="password" nz-input formControlName="password" placeholder="请输入登录密码" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <div nz-row class="login-form-margin">
+            <div nz-col [nzSpan]="12">
+              <label nz-checkbox formControlName="remember">
+                <span>下次自动登录</span>
+              </label>
+            </div>
+            <div nz-col [nzSpan]="12">
+              <a class="login-type" (click)="areaToggle($event)">海外手机号登录</a>
+            </div>
+          </div>
+          <button nz-button class="login-form-button login-form-margin" nzType="primary" [nzLoading]="!is_safe">{{
+            is_safe==true ? "登&nbsp;&nbsp;录" : !is_safe ? "安全控件加载中" : "安全校验失败" }}</button>
+        </form>
+      </div>
+      <div class="qrcode" [hidden]="reg_login!='qr'">
+        <div class="qrcode_canvas"></div>
+        <p>
+          打开雪球 App，在「我的」页面顶部右上角点击「 <img src="assets/images/Vector-9e83d3dd32.png" alt="scan-code"> 」<br>
+          注：请使用 12.42 及以上版本雪球 App
+        </p>
+      </div>
+      <div class="footer" [hidden]="reg_login=='qr'">
+        <p>注册/登录 即代表同意 <a href="">雪球服务协议</a> & <a href="">雪球隐私政策</a></p>
+        <div class="modal_3rd">
+          <div class="title">
+            <span>第三方登录</span>
+          </div>
+          <div>
+            <a href="" title="微信登录">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-weixin"></use>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

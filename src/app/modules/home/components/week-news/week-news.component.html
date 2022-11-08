@@ -1,0 +1,25 @@
+<div class="weekNews">
+    <div class="time" ng-cloak>
+        <span>{{ newsTime | date: 'd'}}</span>{{ numToMouth(newsTime | date: 'M') }}
+    </div>
+    <table class="news" *ngFor="let new of weekNews;let i=index;"
+        [ngStyle]="{'border-bottom':i==weekNews.length-1?'none':''}">
+        <tr [class]="{'mark': new.mark==1}">
+            <td>{{ new.created_at | date: 'HH:mm'}}</td>
+            <td>
+                <span class="point"></span>
+                <span class="line"></span>
+            </td>
+            <td>
+                <!-- 帖子详情 -->
+                <a [routerLink]="[ '/',new.user_id, new.status_id]" target="_blank">{{ new.text }}</a>
+            </td>
+        </tr>
+    </table>
+    <nz-spin nzSimple *ngIf="reqing==true"></nz-spin>
+    <div class="error" *ngIf="reqing=='error'">
+        <p>哎呀>_<！网络出了点问题~ </p>
+    </div>
+    <a class="load_more_news" (click)="getMoreNews()" *ngIf="reqing!=true">{{ reqing==false ? "加载更多" :
+        "点击重新加载数据"}}</a>
+</div>

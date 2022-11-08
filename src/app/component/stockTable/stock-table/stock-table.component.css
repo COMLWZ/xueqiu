@@ -1,0 +1,101 @@
+.stock_container {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+.stock_container .tip {
+  text-align: center;
+  margin: 20px;
+}
+.stock_container .stock_list_over {
+  min-width: 100%;
+  overflow-x: scroll;
+}
+.stock_container .scroll_warpper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 15px;
+  border-bottom: 1px solid #f1f1f1;
+}
+.stock_container .scroll_warpper .top_scroll_bar {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 11px;
+  background-color: #ccc;
+  border-radius: 5px;
+}
+.stock_container .stock_table {
+  font-size: 13px;
+  width: 100%;
+}
+.stock_container .stock_table ::ng-deep table {
+  width: 100%;
+  border: 4px solid #f4f4f4;
+}
+.stock_container .stock_table ::ng-deep table tr th {
+  padding-left: 5px;
+  text-align: left;
+  line-height: 30px;
+  color: #0055a2;
+  background-color: #fff;
+  white-space: nowrap;
+  text-align: right;
+}
+.stock_container .stock_table ::ng-deep table tr th:first-child {
+  text-align: left;
+}
+.stock_container .stock_table ::ng-deep table tr td {
+  padding: 6px 0 6px 5px;
+  line-height: 20px;
+  border: 1px solid #e4f2ff;
+  border-left: none;
+  border-right: none;
+  text-align: right;
+}
+.stock_container .stock_table ::ng-deep table tr td:first-child {
+  text-align: left;
+}
+.stock_container .stock_table ::ng-deep table tr:last-child td {
+  border-bottom: none;
+}
+.stock_container .stock_table ::ng-deep table tr td:first-child {
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.stock_container .stock_table ::ng-deep table tr td:nth-child(2) {
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stock_container .stock_table ::ng-deep table tr:nth-child(2n + 1) {
+  background-color: #f7fbff;
+}
+.stock_container .stock_table ::ng-deep table a {
+  color: #0055a2;
+  text-decoration: none;
+}
+.stock_container .stock_table ::ng-deep table tr.tips td {
+  font-weight: 700;
+}
+.stock_container ::ng-deep .ant-spin img {
+  position: relative;
+  top: 45%;
+}
+.stock_container .ant-pagination {
+  float: right;
+}
+.stock_container ::ng-deep .ant-spin-nested-loading {
+  min-height: 400px;
+}
+.stock_up {
+  color: #c10;
+}
+.stock_down {
+  color: #383;
+}

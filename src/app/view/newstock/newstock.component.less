@@ -1,0 +1,312 @@
+// 股票列表
+.stock_list_con {
+  position: relative;
+  .header_title {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #d7d7d7;
+    line-height: 28px;
+    width: 100%;
+    font-size: 14px;
+    height: 30px;
+    overflow: hidden;
+    .title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .more_move {
+      a {
+        color: #0055a2;
+        vertical-align: super;
+      }
+      span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin: 6px 0 0 5px;
+        cursor: pointer;
+      }
+      .up {
+        background: url(../../../assets/images/icon_arrow_move.png) -16px 0 no-repeat;
+      }
+      .down {
+        background: url(../../../assets/images/icon_arrow_move.png) -16px -16px
+          no-repeat;
+      }
+      .up_no {
+        background: url(../../../assets/images/icon_arrow_move.png) no-repeat !important;
+      }
+      .down_no {
+        background: url(../../../assets/images/icon_arrow_move.png) 0 -16px no-repeat !important;
+      }
+    }
+  }
+  ::ng-deep .ant-result {
+    min-height: 300px;
+    .ant-result-icon > .anticon {
+      font-size: 30px;
+    }
+  }
+  .stockList {
+    margin-bottom: 20px;
+    ::ng-deep table {
+      width: 100%;
+      font-size: 13px;
+      padding: 5px;
+      tr th {
+        padding-left: 5px;
+        text-align: left;
+        line-height: 30px;
+        color: #0055a2;
+        background-color: #fff;
+        white-space: nowrap;
+        text-align: right;
+        &:first-child {
+          text-align: left;
+        }
+      }
+      tr td {
+        padding: 6px 0 6px 5px;
+        line-height: 20px;
+        border: 1px solid #e4f2ff;
+        border-left: none;
+        border-right: none;
+        text-align: right;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tr td:first-child {
+        max-width: 130px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      tr:nth-child(2n + 1) {
+        background-color: #f7fbff;
+      }
+      a {
+        color: #0055a2;
+        text-decoration: none;
+      }
+    }
+    ::ng-deep .ant-spin-nested-loading {
+      min-height: 100px;
+      img {
+        position: absolute;
+        top: 45%;
+        transform: translateX(-10px);
+      }
+    }
+    ::ng-deep .ant-empty-normal {
+      margin: 110px 0;
+    }
+  }
+  .stockChart {
+    margin-top: 10px;
+    position: relative;
+    .loading{
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translateX(-10px);
+
+    }
+    .showType {
+      a {
+        display: inline-block;
+        line-height: 1;
+        color: #0055a2;
+        padding: 5px 10px;
+      }
+      .selected {
+        color: #fff;
+        background-color: #0055a2;
+      }
+    }
+  }
+  .stock_chart {
+    width: 100%;
+    height: 360px;
+  }
+}
+
+.stock_warpper {
+  width: 960px;
+  margin: 0 auto;
+  padding-top: 20px;
+  display: flex;
+  align-items: flex-start;
+}
+.industry_nav {
+  font-size: 13px;
+  width: 110px;
+  margin-right: 20px;
+  ::ng-deep .first-nav {
+    line-height: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    padding-left: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    & + ul {
+      display: none;
+    }
+    &:nth-child(3) {
+      background-color: red;
+    }
+    &.active {
+      background-color: #eee;
+      & + ul {
+        display: block;
+      }
+    }
+  }
+  ::ng-deep .second-nav {
+    border-bottom: 1px solid #f1f1f1;
+    li {
+      position: relative;
+      line-height: 28px;
+      padding-left: 10px;
+      cursor: pointer;
+      .close {
+        position: absolute;
+        right: 0;
+        color: #9f9d9d;
+        display: none;
+        &:hover{
+          color: #000;
+        }
+        &::before {
+          content: "\f00d";
+          font-family: "FontAwesome";
+          font-size: 10px;
+        }
+      }
+      &:hover > .close {
+        display: inline-block;
+      }
+      &.removeAll {
+        text-align: right;
+        color: #0055a2;
+        cursor: pointer;
+        line-height: 14px;
+        margin-bottom: 10px;
+      }
+      i.list-style {
+        float: left;
+        width: 12px;
+        height: 12px;
+        background: url(../../../assets/images/ul-list-type.png) no-repeat;
+        margin-top: 10px;
+        &::after {
+          content: "";
+          clear: both;
+        }
+      }
+      i.expand {
+        width: 12px;
+        height: 12px;
+        float: right;
+        background: url(../../../assets/images/arrow-next.png) no-repeat;
+        margin-top: 8px;
+        &::after {
+          content: "";
+          clear: both;
+        }
+      }
+      a {
+        display: inline-block;
+        line-height: 1;
+        max-width: 80px;
+        color: #000;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .third-nav {
+        position: absolute;
+        width: max-content;
+        max-width: 900px;
+        left: 110px;
+        top: -5px;
+        display: none;
+        background: #fff;
+        z-index: 1000;
+        zoom: 1;
+        border: 1px solid #ddd;
+        padding: 10px;
+        box-shadow: 0 1px 2px #ccc;
+        ul {
+          width: 162px;
+          float: left;
+          overflow: hidden;
+          li {
+            line-height: 25px;
+          }
+          .initial {
+            display: inline-block;
+            background: #eee;
+            width: 20px;
+            line-height: 24px;
+            text-align: center;
+            margin-right: 10px;
+          }
+          a {
+            color: #0055a2;
+          }
+        }
+      }
+      &:hover > .third-nav {
+        display: block;
+      }
+    }
+  }
+}
+.stock_container {
+  flex: 1;
+  .stock_header {
+    line-height: 30px;
+    background: #f6f6f6;
+    border: 1px solid #efefef;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    overflow: hidden;
+    font-size: 14px;
+    .ant-breadcrumb {
+      float: left;
+      line-height: inherit;
+      color: #000;
+      ::ng-deep a {
+        color: #0055a2;
+      }
+      :first-child a {
+        font-weight: bold;
+      }
+      ::ng-deep .ant-breadcrumb-separator {
+        margin: 0 2px;
+        color: #000;
+      }
+      .separator {
+        margin: 0 8px;
+      }
+    }
+    .stock_pagesize {
+      float: right;
+      overflow: hidden;
+      a {
+        color: #0055a2;
+        margin-right: 10px;
+      }
+      a.selected {
+        color: #ccc;
+      }
+    }
+  }
+  .newstock_main {
+    display: flex;
+    flex-direction: column;
+  }
+}

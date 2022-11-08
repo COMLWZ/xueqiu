@@ -1,0 +1,67 @@
+<div class="stock_container" #stockTop>
+    <ng-container *ngIf="type=='all'; else elseTemplate">
+        <div class="stock_table">
+            <nz-table #columnTable [nzData]="listData" [nzLoading]="!listData" [nzLoadingIndicator]="loading"
+                [nzScroll]="{ x: '' }" [nzFrontPagination]="false">
+                <thead>
+                    <tr *ngIf="listData&&listData.length>0">
+                        <th *ngFor="let key of lst;let index=index;" [nzLeft]="index<2 ? true : false">{{ obj[key] }}
+                        </th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stock of columnTable.data">
+                        <ng-container *ngFor="let key of lst;let index=index;">
+                            <td nzLeft *ngIf="index<2"><a href="">{{ stock[key] }}</a></td>
+                            <td *ngIf="index==2"
+                                [ngClass]="{'stock_up': stock[lst[3]]>0, 'stock_down': stock[lst[3]]<0}">{{
+                                stock[key] | myriabit }}</td>
+                            <td *ngIf="index==3" [ngClass]="{'stock_up': stock[key]>0, 'stock_down': stock[key]<0}">{{
+                                stock[key] | myriabit:0 }}</td>
+                            <td *ngIf="index>3&&index<6"
+                                [ngClass]="{'stock_up': stock[key]>0, 'stock_down': stock[key]<0}">{{ ((stock[key] |
+                                myriabit:0) + '%') | handnull }}</td>
+                            <td *ngIf="index==8">{{ ((stock[key] | myriabit:0) + '%') | handnull }}</td>
+                            <td *ngIf="index==10">{{ ((stock[key] | myriabit:0) + '%') | handnull }}</td>
+                            <td *ngIf="index>5&&index!=8&&index!=10">{{ stock[key] | myriabit }}</td>
+                        </ng-container>
+                        <td><a href="/account/login">关注</a></td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </ng-container>
+    <ng-template #elseTemplate>
+        <div class="stock_table">
+            <nz-table #columnTable [nzData]="listData" [nzPageSize]="pageSize" [nzLoading]="!listData"
+                [nzLoadingIndicator]="loading" [nzScroll]="{ x: '' }" nzPaginationType="small"
+                [nzHideOnSinglePage]="true">
+                <thead>
+                    <tr *ngIf="listData&&listData.length>0">
+                        <th *ngFor="let key of lst;let index=index;" [nzLeft]="index<2 ? true : false">{{ obj[key] }}
+                        </th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stock of columnTable.data">
+                        <td nzLeft><a href="" [title]="stock.name">{{ stock[lst[0]] }}</a></td>
+                        <ng-container *ngFor="let key of lst;let index=index;">
+                            <td *ngIf="index!=0">{{ stock[key] | myriabit:1 }}</td>
+                        </ng-container>
+                        <td><a href="/account/login">关注</a></td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </ng-template>
+
+    <!-- 分页 -->
+    <nz-pagination [nzTotal]="total" [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" nzSize="small"
+        nzHideOnSinglePage="true" (nzPageIndexChange)="PageIndexChange()"></nz-pagination>
+</div>
+
+<ng-template #loading>
+    <img src="assets/images/ajax-loader.gif" alt="加载中...">
+</ng-template>

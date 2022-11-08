@@ -1,0 +1,206 @@
+.login_mask{
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .4);
+  .modal_login{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    .modal_banner i{
+      font-size: 20px;
+      color: #fff;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      cursor: pointer;
+    }
+  }
+}
+.modal_login {
+  width: 450px;
+  margin: 0 auto 60px auto;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  .modal_banner {
+    position: relative;
+    height: 120px;
+    width: calc(100% + 2px);
+    margin: -1px 0 0 -1px;
+    background: url(../../../assets/images/login.png) no-repeat;
+    background-size: contain;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  .modal_login_main {
+    padding: 20px 40px 30px;
+    .addon {
+      font-size: 13px;
+      color: #909499;
+      flex: none;
+      margin: auto;
+      .send_code {
+        display: inline-block;
+        margin: 0 10px;
+        padding: 4px 0;
+        color: #909499;
+        cursor: not-allowed;
+        &.active {
+          cursor: pointer;
+          color: #06c;
+        }
+      }
+    }
+    .qrcode {
+      .qrcode_canvas {
+        text-align: center;
+      }
+      p {
+        font-size: 15px;
+        color: #33353c;
+        line-height: 21px;
+        display: block;
+        margin-top: 25px;
+        text-align: center;
+        white-space: nowrap;
+        img {
+          width: 16px;
+          height: 16px;
+          vertical-align: text-bottom;
+        }
+      }
+    }
+  }
+  .login_nav {
+    border-bottom: 1px solid #edf0f5;
+    margin-bottom: 20px;
+    a {
+      display: inline-block;
+      font-size: 15px;
+      color: #909499;
+      margin-right: 20px;
+      padding: 0 4px 4px;
+      &.active {
+        color: #000;
+        border-bottom: 3.5px solid #07d;
+      }
+    }
+  }
+  .login-form-margin {
+    margin-bottom: 16px;
+    font-size: 13px;
+    ::ng-deep .ant-checkbox-inner {
+      width: 14px;
+      height: 14px;
+    }
+    span {
+      font-size: 13px !important;
+    }
+  }
+  .login-type {
+    float: right;
+  }
+  .login-form-button {
+    width: 100%;
+    height: 44px;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 15px;
+    color: #fff;
+    background-color: #06c;
+    border-radius: 30px;
+    background-image: linear-gradient(102deg, #428ee9 17%, #094ec5 100%);
+    opacity: 0.75;
+  }
+  ::ng-deep .ant-btn > .anticon {
+    position: absolute;
+    right: 95px;
+    top: 13px;
+  }
+  .ant-input-group {
+    display: flex;
+    border: 1px solid #edf0f5;
+    border-radius: 4px;
+    input {
+      border: none;
+      border-color: transparent !important;
+      padding: 11px 0 11px 17px;
+      font-size: 15px;
+      flex: 1;
+      &:focus {
+        background-color: transparent !important;
+      }
+    }
+  }
+  p {
+    font-size: 13px;
+    color: #909499;
+    margin-bottom: 25px;
+  }
+  .select {
+    margin: auto;
+    select {
+      margin-left: 8px;
+      width: 55px;
+      min-width: 55px;
+      max-width: 120px;
+      font-size: 12px;
+      border: 0;
+      outline: 0;
+      color: #33353c;
+      box-sizing: content-box;
+      padding: 2px 12px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      background: url(../../../assets/images/select_arrow-8f4759b16f.png) no-repeat
+        scroll right center transparent;
+    }
+  }
+  .modal_3rd {
+    text-align: center;
+    .title {
+      overflow: hidden;
+      font-size: 13px;
+      color: #909499;
+      span {
+        position: relative;
+        &::before {
+          content: "";
+          position: absolute;
+          width: 150px;
+          height: 2px;
+          top: 50%;
+          right: 150%;
+          background-color: #edf0f5;
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          width: 150px;
+          height: 2px;
+          top: 50%;
+          left: 150%;
+          background-color: #edf0f5;
+        }
+      }
+    }
+    div {
+      margin-top: 15px;
+      svg {
+        width: 30px;
+        height: 30px;
+        fill: #888e94;
+        &:hover {
+          fill: #06c;
+        }
+      }
+    }
+  }
+}

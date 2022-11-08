@@ -1,0 +1,34 @@
+<div class="recommend_container">
+    <ng-container *ngFor="let list of newsList">
+        <div class="recommend" *ngIf="list!='error'">
+            <div class="newsItem" *ngFor="let item of list;let i=index;">
+                <!-- 骨架屏 -->
+                <nz-skeleton [nzLoading]="item==true" [nzActive]="'true'" [nzParagraph]="{rows:3,width:'100%'}">
+                    <!-- 帖子详情 -->
+                    <a [routerLink]="[ '/',item.original_status?.user_id, item.original_status?.id]" target="_blank">
+                        <h3>{{item.original_status?.title}}</h3>
+                        <p [innerHtml]="item.original_status?.description" class="inner"></p>
+                    </a>
+                </nz-skeleton>
+                <div class="user">
+                    <nz-skeleton [nzLoading]="item==true" [nzActive]="'true'" [nzParagraph]="{rows:1}" [nzTitle]=false>
+                        <a href="" class="user_img">
+                            <img [src]="(item.original_status?.user?.photo_domain + (item.original_status?.user?.profile_image_url | splitUrl)) || ''"
+                                alt="">
+                        </a>
+                    </nz-skeleton>
+                    <nz-skeleton [nzLoading]="item==true" [nzActive]="'true'" [nzParagraph]="{rows:1,width: '120px'}"
+                        [nzTitle]=false>
+                        <a href="" class="username">{{ item.original_status?.user.screen_name}}</a>
+                        <span class="created_time">{{item.original_status?.created_at | date:'MM-dd HH:mm'}}</span>
+                    </nz-skeleton>
+                </div>
+            </div>
+        </div>
+        <nz-result nzIcon="warning" nzTitle="数据请求失败了>_<" nzStatus="error" nzSubTitle="请刷新页面或点击以下按钮重新加载！"
+            *ngIf="list=='error'">
+        </nz-result>
+    </ng-container>
+    <a class="load_more_news" (click)="getMoreNews()">{{ reqing==true ? "正在加载请稍后..." :
+        newsList[newsList.length-1]=="error" ? "点击重新加载数据" : "加载更多" }}</a>
+</div>

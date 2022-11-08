@@ -1,0 +1,422 @@
+<div class="container">
+    <div class="mainLeft">
+        <div class="main">
+            <div class="choose_container">
+                <h4>选择范围</h4>
+                <div class="chooseRange">
+                    <div class="rangeItem" *ngIf="this.type=='CN'">
+                        <span>市场：</span>
+                        <select name="rangeMarket" [(ngModel)]="exchange">
+                            <option value="sh_sz">全部A股</option>
+                            <option value="sha">沪市A股</option>
+                            <option value="sza">深市A股</option>
+                        </select>
+                    </div>
+                    <div class="rangeItem">
+                        <span>行业：</span>
+                        <select name="rangeMarket" [(ngModel)]="indcode">
+                            <option value="">全部</option>
+                            <option *ngFor="let item of industriesList" [value]="item.encode">{{item.name}}</option>
+                        </select>
+                    </div>
+                    <div class="rangeItem" *ngIf="this.type=='CN'">
+                        <span>地域模块：</span>
+                        <select name="rangeMarket" [(ngModel)]="areacode">
+                            <option value="">全部</option>
+                            <option *ngFor="let key of areaKey" [value]="key">{{ areas[key] }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="condition_set">
+                <h4>条件设置</h4>
+                <div class="condition_detail">
+                    <div class="condition_nav">
+                        <ul>
+                            <li *ngFor="let key of conditionKey;let index=index" (click)="toggleTabs(key)"
+                                [ngClass]="{'active': currentTab==key}">
+                                <i nz-icon [nzType]="conditionIcons[index]" nzTheme="twotone"></i>
+                                {{ key }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="condition_list" [hidden]="currentTab!='基本指标'">
+                        <div class="conditions">
+                            <label *ngFor="let condition of conditions['基本指标']" [title]="condition.name">
+                                <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                    [id]="condition.field" (change)="checkEvent($event, condition)">
+                                <span>{{condition.name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="condition_list" [hidden]="currentTab!='雪球指标'">
+                        <div class="conditions">
+                            <label *ngFor="let condition of conditions['雪球指标']" [title]="condition.name">
+                                <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                    [id]="condition.field" (change)="checkEvent($event, condition)">
+                                <span>{{condition.name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="condition_list" [hidden]="currentTab!='行情指标'">
+                        <div class="conditions">
+                            <label *ngFor="let condition of conditions['行情指标']" [title]="condition.name">
+                                <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                    [id]="condition.field" (change)="checkEvent($event, condition)">
+                                <span>{{condition.name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div *ngIf="this.type!='US'" class="condition_list" [hidden]="currentTab!='财务报表'">
+                        <nz-collapse nzGhost="true">
+                            <nz-collapse-panel class="first" nzHeader="利润表" [nzActive]="nzActives[0]"
+                                [nzExpandedIcon]="panelicon0" (click)="toggleCollapse(0)">
+                                <div class="conditions_p">
+                                    <label *ngFor="let condition of conditions['财务报表'][0]['利润表']"
+                                        [title]="condition.name">
+                                        <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                            [id]="condition.field" (change)="checkEvent($event, condition)">
+                                        <span>{{condition.name}}</span>
+                                    </label>
+                                </div>
+                                <ng-template #panelicon0 let-active>
+                                    <span class="switch">
+                                        <i nz-icon nzType="right-circle" nzTheme="twotone"
+                                            [nzRotate]="nzActives[0]? 90 : -90"></i>
+                                        {{nzActives[0]?"收起":"展开"}}
+                                    </span>
+                                </ng-template>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <nz-collapse nzGhost="true">
+                            <nz-collapse-panel nzHeader="每股数据" [nzActive]="nzActives[1]" [nzExpandedIcon]="panelicon1"
+                                (click)="toggleCollapse(1)">
+                                <div class="conditions_p">
+                                    <label *ngFor="let condition of conditions['财务报表'][1]['每股数据']"
+                                        [title]="condition.name">
+                                        <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                            [id]="condition.field" (change)="checkEvent($event, condition)">
+                                        <span>{{condition.name}}</span>
+                                    </label>
+                                </div>
+                                <ng-template #panelicon1>
+                                    <span class="switch">
+                                        <i nz-icon nzType="right-circle" nzTheme="twotone"
+                                            [nzRotate]="nzActives[1]? 90 : -90"></i>
+                                        {{nzActives[1]?"收起":"展开"}}
+                                    </span>
+                                </ng-template>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <nz-collapse nzGhost="true">
+                            <nz-collapse-panel nzHeader="资产负债表" [nzActive]="nzActives[2]" [nzExpandedIcon]="panelicon2"
+                                (click)="toggleCollapse(2)">
+                                <div class="conditions_p">
+                                    <label *ngFor="let condition of conditions['财务报表'][2]['资产负债表']"
+                                        [title]="condition.name">
+                                        <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                            [id]="condition.field" (change)="checkEvent($event, condition)">
+                                        <span>{{condition.name}}</span>
+                                    </label>
+                                </div>
+                                <ng-template #panelicon2 let-active>
+                                    <span class="switch">
+                                        <i nz-icon nzType="right-circle" nzTheme="twotone"
+                                            [nzRotate]="nzActives[2]? 90 : -90"></i>
+                                        {{nzActives[2]?"收起":"展开"}}
+                                    </span>
+                                </ng-template>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <nz-collapse nzGhost="true">
+                            <nz-collapse-panel nzHeader="现金流量表" [nzActive]="nzActives[3]" [nzExpandedIcon]="panelicon3"
+                                (click)="toggleCollapse(3)">
+                                <div class="conditions_p">
+                                    <label *ngFor="let condition of conditions['财务报表'][3]['现金流量表']"
+                                        [title]="condition.name">
+                                        <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                            [id]="condition.field" (change)="checkEvent($event, condition)">
+                                        <span>{{condition.name}}</span>
+                                    </label>
+                                </div>
+                                <ng-template #panelicon3 let-active>
+                                    <span class="switch">
+                                        <i nz-icon nzType="right-circle" nzTheme="twotone"
+                                            [nzRotate]="nzActives[3]? 90 : -90"></i>
+                                        {{nzActives[3]?"收起":"展开"}}
+                                    </span>
+                                </ng-template>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                    <div *ngIf="this.type=='US'" class="condition_list" [hidden]="currentTab!='财务报表'">
+                        <nz-collapse nzGhost="true">
+                            <nz-collapse-panel class="first" nzHeader="利润表" [nzActive]="nzActives[0]"
+                                [nzExpandedIcon]="panelicon0" (click)="toggleCollapse(0)">
+                                <div class="conditions_p">
+                                    <label *ngFor="let condition of conditions['财务报表'][0]['利润表']"
+                                        [title]="condition.name">
+                                        <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                            [id]="condition.field" (change)="checkEvent($event, condition)">
+                                        <span>{{condition.name}}</span>
+                                    </label>
+                                </div>
+                                <ng-template #panelicon0 let-active>
+                                    <span class="switch">
+                                        <i nz-icon nzType="right-circle" nzTheme="twotone"
+                                            [nzRotate]="nzActives[0]? 90 : -90"></i>
+                                        {{nzActives[0]?"收起":"展开"}}
+                                    </span>
+                                </ng-template>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <nz-collapse nzGhost="true">
+                            <nz-collapse-panel nzHeader="资产负债表" [nzActive]="nzActives[1]" [nzExpandedIcon]="panelicon1"
+                                (click)="toggleCollapse(1)">
+                                <div class="conditions_p">
+                                    <label *ngFor="let condition of conditions['财务报表'][1]['资产负债表']"
+                                        [title]="condition.name">
+                                        <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                            [id]="condition.field" (change)="checkEvent($event, condition)">
+                                        <span>{{condition.name}}</span>
+                                    </label>
+                                </div>
+                                <ng-template #panelicon1>
+                                    <span class="switch">
+                                        <i nz-icon nzType="right-circle" nzTheme="twotone"
+                                            [nzRotate]="nzActives[1]? 90 : -90"></i>
+                                        {{nzActives[1]?"收起":"展开"}}
+                                    </span>
+                                </ng-template>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                        <nz-collapse nzGhost="true">
+                            <nz-collapse-panel nzHeader="现金流量表" [nzActive]="nzActives[2]" [nzExpandedIcon]="panelicon2"
+                                (click)="toggleCollapse(2)">
+                                <div class="conditions_p">
+                                    <label *ngFor="let condition of conditions['财务报表'][2]['现金流量表']"
+                                        [title]="condition.name">
+                                        <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                            [id]="condition.field" (change)="checkEvent($event, condition)">
+                                        <span>{{condition.name}}</span>
+                                    </label>
+                                </div>
+                                <ng-template #panelicon2 let-active>
+                                    <span class="switch">
+                                        <i nz-icon nzType="right-circle" nzTheme="twotone"
+                                            [nzRotate]="nzActives[2]? 90 : -90"></i>
+                                        {{nzActives[2]?"收起":"展开"}}
+                                    </span>
+                                </ng-template>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                    <div class="condition_list" [hidden]="currentTab!='成长指标'">
+                        <div class="conditions">
+                            <label *ngFor="let condition of conditions['成长指标']" [title]="condition.name">
+                                <input type="checkbox" [name]="condition.field" [value]="condition.field"
+                                    [id]="condition.field" (change)="checkEvent($event, condition)">
+                                <span>{{condition.name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="select_conditions">
+                <h4>条件筛选</h4>
+                <div class="screener_list">
+                    <div class="header">
+                        <span class="name">条件</span>
+                        <span class="min">最小值</span>
+                        <span class="scope">条件范围/股票分布</span>
+                        <span class="max">最大值</span>
+                        <span class="date">日期设置</span>
+                        <span class="delete">删除</span>
+                    </div>
+                </div>
+                <div class="screener_condition" *ngFor="let screen of screenList;let index=index;">
+                    <span class="name">{{ screen.name }}</span>
+                    <span>
+                        <input type="text" class="min" [(ngModel)]="screen.setmin" (blur)="setRangeBlur(index, 'min')">
+                    </span>
+                    <span class="scope">
+                        <svg height="30" version="1.1" width="160" xmlns="http://www.w3.org/2000/svg"
+                            style="overflow: hidden; position: relative; left: -0.2px; top: -0.8px;">
+                            <desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.2
+                            </desc>
+                            <defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
+                            <path fill="none" stroke="#0066cc" d="M5,30L5,29.9934196095635" stroke-width="1"
+                                style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                            <path fill="none" stroke="#0066cc" d="M17,30L17,29.9934196095635" stroke-width="1"
+                                style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                            <path fill="none" stroke="#0066cc" d="M25,30L25,0" stroke-width="1"
+                                style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                            <path fill="none" stroke="#0066cc" d="M26,30L26,29.9934196095635" stroke-width="1"
+                                style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                            <path fill="none" stroke="#0066cc" d="M155,30L155,29.9934196095635" stroke-width="1"
+                                style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                            <image x="0" y="7" (mousedown)="msDown($event, index, 'min')" [id]="'minSvg'+index"
+                                width="9" height="16" preserveAspectRatio="none"
+                                xlink:href="//assets.imedao.com/images/drag_btn.png"
+                                style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); cursor: pointer;"></image>
+                            <image x="150" y="7" (mousedown)="msDown($event, index, 'max')" [id]="'maxSvg'+index"
+                                width="9" height="16" preserveAspectRatio="none"
+                                xlink:href="//assets.imedao.com/images/drag_btn.png"
+                                style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); cursor: pointer;"></image>
+                        </svg>
+                        <!-- <nz-slider nzRange [nzMin]="screen.min" [nzMax]="screen.max" [(ngModel)]="minToMax"></nz-slider> -->
+                        <!-- <input type="range" min-width="100%" height="0" [attr.min]="screen.min" [attr.max]="screen.max" [(ngModel)]="screen.setmin">
+                        <input type="range" [min]="screen.min" [max]="screen.max" [(ngModel)]="screen.setmax"> -->
+                    </span>
+                    <span>
+                        <input type="text" class="max" [(ngModel)]="screen.setmax" (blur)="setRangeBlur(index, 'max')">
+                    </span>
+                    <span class="date">
+                        <span [style.display]="screen.has_date!=0? 'none':''" class="new_data">最新数据</span>
+                        <select [hidden]="screen.has_date==0" name="year">
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                            <option value="2014">2014</option>
+                            <option value="2013">2013</option>
+                            <option value="2012">2012</option>
+                            <option value="2011">2011</option>
+                            <option value="2010">2010</option>
+                            <option value="2009">2009</option>
+                            <option value="2008">2008</option>
+                        </select>
+                        <select [hidden]="screen.has_date==0" name="quarter" class="quarter">
+                            <option value="0331">一季报</option>
+                            <option value="0630" selected>中报</option>
+                            <option value="0930">三季报</option>
+                            <option value="1231">年报</option>
+                        </select>
+                    </span>
+                    <span class="delete">
+                        <i nz-icon nzType="close" nzTheme="outline" (click)="delete(index, screen.field)"></i>
+                    </span>
+                </div>
+                <div class="search_wrapper">
+                    <div class="tip" [hidden]="screenList.length>0">从上方筛选条件</div>
+                    <input type="button" value="收藏搜索条件" class="submit fav" [hidden]="screenList.length<1">
+                    <input type="button" value="重置" class="submit clear" [hidden]="screenList.length<1"
+                        (click)="reset()">
+                    <input type="button" value="开始选股" class="submit search" (click)="selectStock()">
+                </div>
+            </div>
+            <div id="stock_anchor" class="stocks_container">
+                <div class="stocks_count">
+                    符合条件股票 <strong>{{stocks.count}}</strong> 只
+                    <span [hidden]="stocks.count<1"> <strong>{{pageIndex}}</strong> <i>/{{stocks.count/30 |
+                            roundUp}}</i>页</span>
+                </div>
+                <div class="select_stocks">
+                    <div id="searchTip" class="tip" [hidden]="stocks.count>0">这里显示搜索结果</div>
+                    <div class="stock_list_over" [hidden]="stocks.list.length<1">
+                        <div class="scroll_warpper">
+                            <div class="top_scroll_bar" id="topScrollBar"></div>
+                        </div>
+                        <table class="stock_list" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 80px;width: 80px;"><i nz-icon nzType="rocket"
+                                            nzTheme="twotone"></i> 股票</th>
+                                    <th style="min-width: 45px;">当前价</th>
+                                    <th style="min-width: 75px;">当日跌涨幅</th>
+                                    <th *ngFor="let item of conditionName"
+                                        style="min-width: 50px; padding-right: 20px;">
+                                        {{item}}</th>
+                                    <th style="min-width: 35px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let stock of stocks.list" (click)="borderTip($event)">
+                                    <td><a href="" [title]="stock.name">{{ stock.name }}</a></td>
+                                    <td [ngClass]="{'red': stock.pct>0, 'green': stock.pct<0}">{{
+                                        stock.current | myriabit }}</td>
+                                    <td [ngClass]="{'red': stock.pct>0, 'green': stock.pct<0}">{{
+                                        ((stock.pct | myriabit) + "%") | handnull}}</td>
+                                    <td *ngFor="let item of conditionValue;let i=index;"
+                                        [ngClass]="{'red': ((conditionName[i] | pctJudge) && stock[item] > 0),'green': ((conditionName[i] | pctJudge) && stock[item] < 0)}">
+                                        {{(conditionName[i] | pctJudge) ? (((stock[item] | myriabit) + "%") | handnull) :
+                                        ((stock[item] | myriabit) | handnull)}}</td>
+                                    <td><a href="/account/login">关注</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- 分页 -->
+                <nz-pagination [(nzPageIndex)]="pageIndex" [nzTotal]="stocks.count" [nzPageSize]="30" nzSize="small"
+                    nzHideOnSinglePage="true" (nzPageIndexChange)="PageIndexChange()"></nz-pagination>
+            </div>
+
+        </div>
+    </div>
+    <div class="mainRight">
+        <div class="stock_rank">
+            <h4>股票排行榜</h4>
+            <ul class="stock_type">
+                <li (click)="getStockRank('follow')" [ngClass]="{'active': orderBy=='follow'}">关注人数</li>
+                <li (click)="getStockRank('tweet')" [ngClass]="{'active': orderBy=='tweet'}">讨论条数</li>
+                <li (click)="getStockRank('deal')" [ngClass]="{'active': orderBy=='deal'}">分享交易</li>
+            </ul>
+            <div class="stock_order">
+                <span (click)="getStockRank(orderBy, '7d')" [ngClass]="{'active': week=='7d'}">本周新增</span>
+                <span (click)="getStockRank(orderBy, '')" [ngClass]="{'active': week==''}">最热门</span>
+            </div>
+            <table class="rank" cellspacing="0" cellpadding="0">
+                <thead>
+                    <th>股票</th>
+                    <th>当前价</th>
+                    <th>跌涨幅</th>
+                    <th>{{stockRank['name']}}</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stock of stockRank['list']">
+                        <td><a href="">{{stock['name']}}</a></td>
+                        <td [ngClass]="{'red': stock.pct>0, 'green': stock.pct<0}">
+                            {{stock['current'] | myriabit}}</td>
+                        <td [ngClass]="{'red': stock.pct>0, 'green': stock.pct<0}">
+                            {{(stock['pct'] | myriabit) + '%'}}</td>
+                        <td [hidden]="stockRank['name']!='关注数'"><a href="">{{stock[orderBy+week]}}</a></td>
+                        <td [hidden]="stockRank['name']=='关注数'">{{stock[orderBy+week]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="stock_rank">
+            <h4>股票排行榜</h4>
+            <div class="stock_type">
+                <select [(ngModel)]="filterType" (change)="getStockFilter(filterOrder, $event)">
+                    <option *ngFor="let item of conditions[conditionKey[0]];" [value]="item.field">{{item.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="stock_order">
+                <span (click)="getStockFilter('desc')" [ngClass]="{'active': filterOrder=='desc'}">最多</span>
+                <span (click)="getStockFilter('asc')" [ngClass]="{'active': filterOrder=='asc'}">最少</span>
+            </div>
+            <table class="rank rank2" cellspacing="0" cellpadding="0">
+                <thead>
+                    <th>股票</th>
+                    <th>当前价</th>
+                    <th>{{stockFilter['name']}}</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stock of stockFilter['list']">
+                        <td><a href="">{{stock['name']}}</a></td>
+                        <td [ngClass]="{'red': stock.pct>0, 'green': stock.pct<0}">{{(stock['current']
+                            | myriabit) + "(" + (((stock['pct'] | myriabit) + "%") | handnull:1) +")"}}</td>
+                        <td>{{stock[filterType | removeDot] | myriabit}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
